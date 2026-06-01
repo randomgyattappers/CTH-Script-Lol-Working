@@ -383,16 +383,43 @@ local function buildUI(onSuccess)
     keyBox.FocusLost:Connect(function(enter) if enter then doVerify() end end)
 
     llBtn.MouseButton1Click:Connect(function()
-        setclipboard(LOOTLABS_URL)
-        setStatus("Lootlabs URL copied! Open it in your browser.", Color3.fromRGB(0, 200, 255))
-        local prev = llBtn.Text llBtn.Text = "✓ Copied!"
-        task.delay(2, function() if llBtn then llBtn.Text = prev end end)
+        if llBtn._clicking then return end
+        llBtn._clicking = true
+        local success = pcall(function() setclipboard(LOOTLABS_URL) end)
+        if success then
+            setStatus("Lootlabs URL copied! Open it in your browser.", Color3.fromRGB(0, 200, 255))
+            local prev = llBtn.Text
+            llBtn.Text = "✓ Copied!"
+            task.delay(2, function()
+                if llBtn then
+                    llBtn.Text = prev
+                    llBtn._clicking = false
+                end
+            end)
+        else
+            setStatus("Failed to copy URL", Color3.fromRGB(255, 68, 102))
+            llBtn._clicking = false
+        end
     end)
+
     lvBtn.MouseButton1Click:Connect(function()
-        setclipboard(LINKVERTISE_URL)
-        setStatus("Linkvertise URL copied! Open it in your browser.", Color3.fromRGB(0, 200, 255))
-        local prev = lvBtn.Text lvBtn.Text = "✓ Copied!"
-        task.delay(2, function() if lvBtn then lvBtn.Text = prev end end)
+        if lvBtn._clicking then return end
+        lvBtn._clicking = true
+        local success = pcall(function() setclipboard(LINKVERTISE_URL) end)
+        if success then
+            setStatus("Linkvertise URL copied! Open it in your browser.", Color3.fromRGB(0, 200, 255))
+            local prev = lvBtn.Text
+            lvBtn.Text = "✓ Copied!"
+            task.delay(2, function()
+                if lvBtn then
+                    lvBtn.Text = prev
+                    lvBtn._clicking = false
+                end
+            end)
+        else
+            setStatus("Failed to copy URL", Color3.fromRGB(255, 68, 102))
+            lvBtn._clicking = false
+        end
     end)
 end
 
