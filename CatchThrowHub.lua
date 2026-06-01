@@ -64,16 +64,17 @@ local function buildUI(onSuccess)
     local TL = MOBILE and 24 or 22
     local PD = 18
 
-    local PANEL_H = PD + 16 + 10 + TL + 8 + 16 + 12 + 1 + 12 + 12 + 6 + BH + 10 + 32 + 10 + BH + 10 + BH + 10 + 16 + 8 + 14 + PD
+    -- FIX: Proper panel height calculation to fit all elements
+    local PANEL_H = PD + 16 + 10 + TL + 8 + 16 + 12 + 1 + 12 + 12 + 6 + BH + 10 + 32 + 10 + BH + 10 + BH + 10 + 40 + 8 + 14 + PD
 
     local panel = Instance.new("Frame")
     panel.Size = UDim2.new(0, PW, 0, PANEL_H)
     panel.AnchorPoint = Vector2.new(0.5, 0.5)
-    panel.Position = UDim2.new(0.5, 0, 0.6, 0)
+    panel.Position = UDim2.new(0.5, 0, 0.5, 0)
     panel.BackgroundColor3 = Color3.fromRGB(9, 13, 28)
-    panel.BackgroundTransparency = 1
+    panel.BackgroundTransparency = 0
     panel.BorderSizePixel = 0
-    panel.ClipsDescendants = true
+    panel.ClipsDescendants = false
     panel.ZIndex = 10
     panel.Parent = sg
     Instance.new("UICorner", panel).CornerRadius = UDim.new(0, 14)
