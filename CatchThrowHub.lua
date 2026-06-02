@@ -57,16 +57,16 @@ local function buildUI(onSuccess)
     bg.ZIndex = 1
     bg.Parent = sg
 
-    local PW = MOBILE and math.min(VP.X * 0.92, 420) or 460
-    local BH = MOBILE and 52 or 44
-    local TS = MOBILE and 13 or 11
-    local TM = MOBILE and 15 or 13
-    local TL = MOBILE and 24 or 22
-    local PD = 18
+    local PW = MOBILE and math.min(VP.X * 0.92, 420) or 500
+    local BH = MOBILE and 52 or 48
+    local TS = MOBILE and 13 or 12
+    local TM = MOBILE and 15 or 14
+    local TL = MOBILE and 24 or 24
+    local PD = 20
 
     local panel = Instance.new("Frame")
     panel.AnchorPoint = Vector2.new(0.5, 0.5)
-    panel.Position = UDim2.new(0.5, 0, 0.6, 0)
+    panel.Position = UDim2.new(0.5, 0, 0.5, 0)
     panel.BackgroundColor3 = Color3.fromRGB(9, 13, 28)
     panel.BackgroundTransparency = 1
     panel.BorderSizePixel = 0
@@ -134,11 +134,11 @@ local function buildUI(onSuccess)
 
     local function gap(n) Y += n end
 
-    mkLabel("⚡ CATCH & THROW HUB", TS, Color3.fromRGB(0, 200, 255), Enum.Font.GothamBlack, nil, 16)
+    mkLabel("⚡ CATCH & THROW HUB", TS, Color3.fromRGB(0, 200, 255), Enum.Font.GothamBlack, nil, 18)
     gap(10)
-    mkLabel("Access Required", TL, Color3.fromRGB(240, 244, 255), Enum.Font.GothamBlack, nil, TL)
+    mkLabel("Access Required", TL, Color3.fromRGB(240, 244, 255), Enum.Font.GothamBlack, nil, TL + 2)
     gap(8)
-    mkLabel("Enter your key or get one free below.", TS, Color3.fromRGB(106, 127, 168), Enum.Font.Gotham, nil, 16)
+    mkLabel("Enter your key or get one free below.", TS, Color3.fromRGB(106, 127, 168), Enum.Font.Gotham, nil, 18)
     gap(12)
 
     local div = Instance.new("Frame")
@@ -150,7 +150,7 @@ local function buildUI(onSuccess)
     div.Parent = panel
     gap(1 + 12)
 
-    mkLabel("YOUR KEY", TS - 1, Color3.fromRGB(106, 127, 168), Enum.Font.GothamBold, nil, 12)
+    mkLabel("YOUR KEY", TS - 1, Color3.fromRGB(106, 127, 168), Enum.Font.GothamBold, nil, 14)
     gap(6)
 
     local inputBG = Instance.new("Frame")
@@ -167,16 +167,16 @@ local function buildUI(onSuccess)
     inputStroke.Parent = inputBG
 
     local keyIcon = Instance.new("TextLabel")
-    keyIcon.Size = UDim2.new(0, 36, 1, 0)
+    keyIcon.Size = UDim2.new(0, 40, 1, 0)
     keyIcon.BackgroundTransparency = 1
     keyIcon.Text = "🔑"
-    keyIcon.TextSize = MOBILE and 17 or 15
+    keyIcon.TextSize = MOBILE and 18 or 16
     keyIcon.ZIndex = 13
     keyIcon.Parent = inputBG
 
     local keyBox = Instance.new("TextBox")
-    keyBox.Size = UDim2.new(1, -44, 1, -4)
-    keyBox.Position = UDim2.new(0, 38, 0, 2)
+    keyBox.Size = UDim2.new(1, -50, 1, -6)
+    keyBox.Position = UDim2.new(0, 42, 0, 3)
     keyBox.BackgroundTransparency = 1
     keyBox.Text = ""
     keyBox.PlaceholderText = "CTH-XXXX-XXXX-XXXX"
@@ -212,10 +212,10 @@ local function buildUI(onSuccess)
         tw(panel, {Position = UDim2.new(0.5, 0, 0.5, -shift)}, 0.2, Enum.EasingStyle.Quad)
     end)
 
-    gap(BH + 10)
+    gap(BH + 12)
 
     local statusBG = Instance.new("Frame")
-    statusBG.Size = UDim2.new(1, -PD * 2, 0, 32)
+    statusBG.Size = UDim2.new(1, -PD * 2, 0, 36)
     statusBG.Position = UDim2.new(0, PD, 0, Y)
     statusBG.BackgroundColor3 = Color3.fromRGB(5, 8, 18)
     statusBG.BackgroundTransparency = 0.3
@@ -225,8 +225,8 @@ local function buildUI(onSuccess)
     Instance.new("UICorner", statusBG).CornerRadius = UDim.new(0, 7)
 
     local statusDot = Instance.new("Frame")
-    statusDot.Size = UDim2.new(0, 7, 0, 7)
-    statusDot.Position = UDim2.new(0, 12, 0.5, -3.5)
+    statusDot.Size = UDim2.new(0, 8, 0, 8)
+    statusDot.Position = UDim2.new(0, 14, 0.5, -4)
     statusDot.BackgroundColor3 = Color3.fromRGB(106, 127, 168)
     statusDot.BorderSizePixel = 0
     statusDot.ZIndex = 13
@@ -234,8 +234,8 @@ local function buildUI(onSuccess)
     Instance.new("UICorner", statusDot).CornerRadius = UDim.new(1, 0)
 
     local statusTxt = Instance.new("TextLabel")
-    statusTxt.Size = UDim2.new(1, -30, 1, 0)
-    statusTxt.Position = UDim2.new(0, 26, 0, 0)
+    statusTxt.Size = UDim2.new(1, -36, 1, 0)
+    statusTxt.Position = UDim2.new(0, 28, 0, 0)
     statusTxt.BackgroundTransparency = 1
     statusTxt.Text = "Waiting for key..."
     statusTxt.TextColor3 = Color3.fromRGB(106, 127, 168)
@@ -252,7 +252,7 @@ local function buildUI(onSuccess)
         tw(statusDot, {BackgroundColor3 = col}, 0.15)
     end
 
-    gap(32 + 10)
+    gap(36 + 12)
 
     local verifyBtn = Instance.new("TextButton")
     verifyBtn.Size = UDim2.new(1, -PD * 2, 0, BH)
