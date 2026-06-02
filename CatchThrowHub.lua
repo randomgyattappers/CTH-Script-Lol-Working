@@ -64,17 +64,13 @@ local function buildUI(onSuccess)
     local TL = MOBILE and 24 or 22
     local PD = 18
 
-    -- FIX: Proper panel height calculation to fit all elements
-    local PANEL_H = PD + 16 + 10 + TL + 8 + 16 + 12 + 1 + 12 + 12 + 6 + BH + 10 + 32 + 10 + BH + 10 + BH + 10 + 40 + 8 + 14 + PD
-
     local panel = Instance.new("Frame")
-    panel.Size = UDim2.new(0, PW, 0, PANEL_H)
     panel.AnchorPoint = Vector2.new(0.5, 0.5)
-    panel.Position = UDim2.new(0.5, 0, 0.5, 0)
+    panel.Position = UDim2.new(0.5, 0, 0.6, 0)
     panel.BackgroundColor3 = Color3.fromRGB(9, 13, 28)
-    panel.BackgroundTransparency = 0
+    panel.BackgroundTransparency = 1
     panel.BorderSizePixel = 0
-    panel.ClipsDescendants = false
+    panel.ClipsDescendants = true  -- will be set to false after sizing
     panel.ZIndex = 10
     panel.Parent = sg
     Instance.new("UICorner", panel).CornerRadius = UDim.new(0, 14)
@@ -321,6 +317,10 @@ local function buildUI(onSuccess)
     gap(8)
     mkLabel("catchthrowhub.com  •  v2.4.1  •  "..(MOBILE and "Mobile" or "PC"), TS - 2, Color3.fromRGB(30, 45, 80), Enum.Font.Gotham, nil, 14)
 
+    -- ==================== FIX 1: Dynamic panel sizing after all children are laid out ====================
+    panel.Size = UDim2.new(0, PW, 0, Y + PD)
+    panel.ClipsDescendants = false
+
     bg.InputBegan:Connect(function(input)
         if input.UserInputType == Enum.UserInputType.MouseButton1
             or input.UserInputType == Enum.UserInputType.Touch then
@@ -380,48 +380,27 @@ local function buildUI(onSuccess)
         end)
     end
 
+    -- ==================== FIX 2: Activated events so taps work on mobile ====================
     verifyBtn.MouseButton1Click:Connect(doVerify)
-    keyBox.FocusLost:Connect(function(enter) if enter then doVerify() end end)
+    verifyBtn.Activated:Connect(doVerify)
 
-    llBtn.MouseButton1Click:Connect(function()
-        if llBtn._clicking then return end
-        llBtn._clicking = true
-        local success = pcall(function() setclipboard(LOOTLABS_URL) end)
-        if success then
-            setStatus("Lootlabs URL copied! Open it in your browser.", Color3.fromRGB(0, 200, 255))
-            local prev = llBtn.Text
-            llBtn.Text = "✓ Copied!"
-            task.delay(2, function()
-                if llBtn then
-                    llBtn.Text = prev
-                    llBtn._clicking = false
-                end
-            end)
-        else
-            setStatus("Failed to copy URL", Color3.fromRGB(255, 68, 102))
-            llBtn._clicking = false
-        end
-    end)
+    local function onClickLL()
+        setclipboard(LOOTLABS_URL)
+        setStatus("Lootlabs URL copied! Open it in your browser.", Color3.fromRGB(0, 200, 255))
+        local prev = llBtn.Text llBtn.Text = "✓ Copied!"
+        task.delay(2, function() if llBtn then llBtn.Text = prev end end)
+    end
+    llBtn.MouseButton1Click:Connect(onClickLL)
+    llBtn.Activated:Connect(onClickLL)
 
-    lvBtn.MouseButton1Click:Connect(function()
-        if lvBtn._clicking then return end
-        lvBtn._clicking = true
-        local success = pcall(function() setclipboard(LINKVERTISE_URL) end)
-        if success then
-            setStatus("Linkvertise URL copied! Open it in your browser.", Color3.fromRGB(0, 200, 255))
-            local prev = lvBtn.Text
-            lvBtn.Text = "✓ Copied!"
-            task.delay(2, function()
-                if lvBtn then
-                    lvBtn.Text = prev
-                    lvBtn._clicking = false
-                end
-            end)
-        else
-            setStatus("Failed to copy URL", Color3.fromRGB(255, 68, 102))
-            lvBtn._clicking = false
-        end
-    end)
+    local function onClickLV()
+        setclipboard(LINKVERTISE_URL)
+        setStatus("Linkvertise URL copied! Open it in your browser.", Color3.fromRGB(0, 200, 255))
+        local prev = lvBtn.Text lvBtn.Text = "✓ Copied!"
+        task.delay(2, function() if lvBtn then lvBtn.Text = prev end end)
+    end
+    lvBtn.MouseButton1Click:Connect(onClickLV)
+    lvBtn.Activated:Connect(onClickLV)
 end
 
 local function loadHub()
