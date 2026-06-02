@@ -70,14 +70,10 @@ local function buildUI(onSuccess)
     panel.BackgroundColor3 = Color3.fromRGB(9, 13, 28)
     panel.BackgroundTransparency = 1
     panel.BorderSizePixel = 0
-    panel.ClipsDescendants = false  -- no clipping
+    panel.ClipsDescendants = false
     panel.ZIndex = 10
     panel.Parent = sg
     Instance.new("UICorner", panel).CornerRadius = UDim.new(0, 14)
-
-    -- IMPORTANT: size is set BEFORE tween so the box has a size
-    -- 417px is the proven height for PC; for mobile you can adjust if needed
-    panel.Size = UDim2.new(0, PW, 0, MOBILE and 440 or 417)
 
     local stroke = Instance.new("UIStroke")
     stroke.Color = Color3.fromRGB(26, 37, 64)
@@ -280,7 +276,7 @@ local function buildUI(onSuccess)
     verifyBtn.MouseEnter:Connect(function() tw(verifyBtn, {BackgroundColor3 = Color3.fromRGB(0, 200, 255)}, 0.1) end)
     verifyBtn.MouseLeave:Connect(function() tw(verifyBtn, {BackgroundColor3 = Color3.fromRGB(0, 155, 215)}, 0.1) end)
 
-    gap(BH + 10)
+    gap(10)
 
     local function mkGetKeyBtn(txt, xscale, xoffset)
         local b = Instance.new("TextButton")
@@ -313,15 +309,16 @@ local function buildUI(onSuccess)
 
     local llBtn = mkGetKeyBtn("🔗  Lootlabs", 0.5, 0)
     local lvBtn = mkGetKeyBtn("🔗  Linkvertise", 0.5, 0.5)
-    gap(BH + 10)
+    gap(10)
 
     mkLabel("💾  Key saves after first use — no re-entry needed.", TS - 1, Color3.fromRGB(50, 70, 110), Enum.Font.Gotham, nil, 16)
     gap(8)
     mkLabel("catchthrowhub.com  •  v2.4.1  •  "..(MOBILE and "Mobile" or "PC"), TS - 2, Color3.fromRGB(30, 45, 80), Enum.Font.Gotham, nil, 14)
 
-    -- No dynamic sizing needed; hardcoded 417px for PC works.
+    -- DYNAMIC PANEL HEIGHT – set size AFTER all children are in place
+    panel.Size = UDim2.new(0, PW, 0, Y + PD)
 
-    -- Now animate the panel into view AFTER it has its final size
+    -- ANIMATION AFTER SIZING
     tw(panel, {BackgroundTransparency = 0, Position = UDim2.new(0.5, 0, 0.5, 0)}, 0.4, Enum.EasingStyle.Back)
 
     bg.InputBegan:Connect(function(input)
@@ -383,7 +380,6 @@ local function buildUI(onSuccess)
         end)
     end
 
-    -- Touch + click both work
     verifyBtn.MouseButton1Click:Connect(doVerify)
     verifyBtn.Activated:Connect(doVerify)
 
