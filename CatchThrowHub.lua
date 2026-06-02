@@ -13,7 +13,8 @@ local SAVE_FILE = "CTH_Key.txt"
 local VP = workspace.CurrentCamera.ViewportSize
 local TOUCH = UserInputService.TouchEnabled
 local KEYBOARD = UserInputService.KeyboardEnabled
-local MOBILE = TOUCH and not KEYBOARD or VP.X < 700
+-- FIX: Prioritize keyboard/mouse (PC) over touch detection
+local MOBILE = not KEYBOARD and TOUCH
 
 local function tw(i, p, t, s)
     TweenService:Create(i, TweenInfo.new(t or 0.25, s or Enum.EasingStyle.Quart, Enum.EasingDirection.Out), p):Play()
@@ -57,12 +58,12 @@ local function buildUI(onSuccess)
     bg.ZIndex = 1
     bg.Parent = sg
 
-    local PW = MOBILE and math.min(VP.X * 0.92, 420) or 500
-    local BH = MOBILE and 52 or 48
-    local TS = MOBILE and 13 or 12
-    local TM = MOBILE and 15 or 14
-    local TL = MOBILE and 24 or 24
-    local PD = 20
+    local PW = MOBILE and math.min(VP.X * 0.92, 420) or 540
+    local BH = MOBILE and 52 or 52
+    local TS = MOBILE and 13 or 13
+    local TM = MOBILE and 15 or 15
+    local TL = MOBILE and 24 or 26
+    local PD = 22
 
     local panel = Instance.new("Frame")
     panel.AnchorPoint = Vector2.new(0.5, 0.5)
@@ -134,12 +135,12 @@ local function buildUI(onSuccess)
 
     local function gap(n) Y += n end
 
-    mkLabel("⚡ CATCH & THROW HUB", TS, Color3.fromRGB(0, 200, 255), Enum.Font.GothamBlack, nil, 18)
+    mkLabel("⚡ CATCH & THROW HUB", TS + 2, Color3.fromRGB(0, 200, 255), Enum.Font.GothamBlack, nil, 20)
     gap(10)
-    mkLabel("Access Required", TL, Color3.fromRGB(240, 244, 255), Enum.Font.GothamBlack, nil, TL + 2)
-    gap(8)
+    mkLabel("Access Required", TL, Color3.fromRGB(240, 244, 255), Enum.Font.GothamBlack, nil, TL + 4)
+    gap(10)
     mkLabel("Enter your key or get one free below.", TS, Color3.fromRGB(106, 127, 168), Enum.Font.Gotham, nil, 18)
-    gap(12)
+    gap(14)
 
     local div = Instance.new("Frame")
     div.Size = UDim2.new(1, -PD * 2, 0, 1)
@@ -148,10 +149,10 @@ local function buildUI(onSuccess)
     div.BorderSizePixel = 0
     div.ZIndex = 12
     div.Parent = panel
-    gap(1 + 12)
+    gap(1 + 14)
 
-    mkLabel("YOUR KEY", TS - 1, Color3.fromRGB(106, 127, 168), Enum.Font.GothamBold, nil, 14)
-    gap(6)
+    mkLabel("YOUR KEY", TS, Color3.fromRGB(106, 127, 168), Enum.Font.GothamBold, nil, 14)
+    gap(8)
 
     local inputBG = Instance.new("Frame")
     inputBG.Size = UDim2.new(1, -PD * 2, 0, BH)
@@ -167,16 +168,16 @@ local function buildUI(onSuccess)
     inputStroke.Parent = inputBG
 
     local keyIcon = Instance.new("TextLabel")
-    keyIcon.Size = UDim2.new(0, 40, 1, 0)
+    keyIcon.Size = UDim2.new(0, 44, 1, 0)
     keyIcon.BackgroundTransparency = 1
     keyIcon.Text = "🔑"
-    keyIcon.TextSize = MOBILE and 18 or 16
+    keyIcon.TextSize = 18
     keyIcon.ZIndex = 13
     keyIcon.Parent = inputBG
 
     local keyBox = Instance.new("TextBox")
-    keyBox.Size = UDim2.new(1, -50, 1, -6)
-    keyBox.Position = UDim2.new(0, 42, 0, 3)
+    keyBox.Size = UDim2.new(1, -54, 1, -8)
+    keyBox.Position = UDim2.new(0, 46, 0, 4)
     keyBox.BackgroundTransparency = 1
     keyBox.Text = ""
     keyBox.PlaceholderText = "CTH-XXXX-XXXX-XXXX"
@@ -212,10 +213,10 @@ local function buildUI(onSuccess)
         tw(panel, {Position = UDim2.new(0.5, 0, 0.5, -shift)}, 0.2, Enum.EasingStyle.Quad)
     end)
 
-    gap(BH + 12)
+    gap(BH + 14)
 
     local statusBG = Instance.new("Frame")
-    statusBG.Size = UDim2.new(1, -PD * 2, 0, 36)
+    statusBG.Size = UDim2.new(1, -PD * 2, 0, 40)
     statusBG.Position = UDim2.new(0, PD, 0, Y)
     statusBG.BackgroundColor3 = Color3.fromRGB(5, 8, 18)
     statusBG.BackgroundTransparency = 0.3
@@ -226,7 +227,7 @@ local function buildUI(onSuccess)
 
     local statusDot = Instance.new("Frame")
     statusDot.Size = UDim2.new(0, 8, 0, 8)
-    statusDot.Position = UDim2.new(0, 14, 0.5, -4)
+    statusDot.Position = UDim2.new(0, 16, 0.5, -4)
     statusDot.BackgroundColor3 = Color3.fromRGB(106, 127, 168)
     statusDot.BorderSizePixel = 0
     statusDot.ZIndex = 13
@@ -234,8 +235,8 @@ local function buildUI(onSuccess)
     Instance.new("UICorner", statusDot).CornerRadius = UDim.new(1, 0)
 
     local statusTxt = Instance.new("TextLabel")
-    statusTxt.Size = UDim2.new(1, -36, 1, 0)
-    statusTxt.Position = UDim2.new(0, 28, 0, 0)
+    statusTxt.Size = UDim2.new(1, -40, 1, 0)
+    statusTxt.Position = UDim2.new(0, 32, 0, 0)
     statusTxt.BackgroundTransparency = 1
     statusTxt.Text = "Waiting for key..."
     statusTxt.TextColor3 = Color3.fromRGB(106, 127, 168)
@@ -252,7 +253,7 @@ local function buildUI(onSuccess)
         tw(statusDot, {BackgroundColor3 = col}, 0.15)
     end
 
-    gap(36 + 12)
+    gap(40 + 14)
 
     local verifyBtn = Instance.new("TextButton")
     verifyBtn.Size = UDim2.new(1, -PD * 2, 0, BH)
@@ -276,7 +277,7 @@ local function buildUI(onSuccess)
     verifyBtn.MouseEnter:Connect(function() tw(verifyBtn, {BackgroundColor3 = Color3.fromRGB(0, 200, 255)}, 0.1) end)
     verifyBtn.MouseLeave:Connect(function() tw(verifyBtn, {BackgroundColor3 = Color3.fromRGB(0, 155, 215)}, 0.1) end)
 
-    gap(10)
+    gap(12)
 
     local function mkGetKeyBtn(txt, xscale, xoffset)
         local b = Instance.new("TextButton")
@@ -309,11 +310,11 @@ local function buildUI(onSuccess)
 
     local llBtn = mkGetKeyBtn("🔗  Lootlabs", 0.5, 0)
     local lvBtn = mkGetKeyBtn("🔗  Linkvertise", 0.5, 0.5)
-    gap(10)
+    gap(12)
 
-    mkLabel("💾  Key saves after first use — no re-entry needed.", TS - 1, Color3.fromRGB(50, 70, 110), Enum.Font.Gotham, nil, 16)
+    mkLabel("💾  Key saves after first use — no re-entry needed.", TS, Color3.fromRGB(50, 70, 110), Enum.Font.Gotham, nil, 16)
     gap(8)
-    mkLabel("catchthrowhub.com  •  v2.4.1  •  "..(MOBILE and "Mobile" or "PC"), TS - 2, Color3.fromRGB(30, 45, 80), Enum.Font.Gotham, nil, 14)
+    mkLabel("catchthrowhub.com  •  v2.4.2  •  "..(MOBILE and "Mobile" or "PC"), TS - 1, Color3.fromRGB(30, 45, 80), Enum.Font.Gotham, nil, 14)
 
     -- DYNAMIC PANEL HEIGHT – set size AFTER all children are in place
     panel.Size = UDim2.new(0, PW, 0, Y + PD)
